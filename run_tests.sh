@@ -11,7 +11,7 @@ for t in test/*.in; do
 	output=test/$name.out
     
     text=$(cat $t)
-    readarray -t args <<< "$text"
+    readarray args <<< "$text"
     # echo ${args[*]}
     
 	if ./myfind.py ${args[*]} | sort - | diff - $output ; then
