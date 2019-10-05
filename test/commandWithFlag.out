@@ -1,0 +1,146 @@
+     1	#!/usr/bin/env python3
+     2	import os
+     3	import sys
+     4	import re
+     5	
+     6	USAGE = "Usage: myfind [--regex=pattern | --name=filename] directory [command]"
+     7	
+     8	def replacebrackets(li, path):
+     9	    result = []
+    10	
+    11	    i = 0
+    12	    while i < len(li):
+    13	        if '{}' in li[i]:
+    14	            result.append(li[i].replace('{}',path))
+    15	        else:
+    16	            result.append(li[i])
+    17	        i += 1
+    18	    
+    19	    return result
+    20	
+    21	def find(directory, regex=None, name=None, command=None):
+    22	    # Saving the walking data
+    23	    walk = {} # key = root, value = (dirs(tuple), files(tuple))
+    24	    for tup in os.walk(directory):
+    25	        walk[tup[0]] = (tuple(tup[1]), tuple(tup[2]))
+    26	    # print(walk)
+    27	    
+    28	    # The directory doesn't exist. 
+    29	    # Treat it as an invalid command line argument, and print out the usage string
+    30	    if walk == {}:
+    31	        sys.exit(USAGE)
+    32	        
+    33	    output = [] # Output lines collection
+    34	    
+    35	    # directory
+    36	    if (regex is None) and (name is None):
+    37	        for i in walk.items():
+    38	            output.append(i[0])
+    39	            for f in i[1][1]:
+    40	                output.append(i[0] + '/' + f) # adds sub-file
+    41	    # Name flag
+    42	    elif name is not None:
+    43	        for i in walk.items():
+    44	            # Check the directory name
+    45	            if i[0].split('/')[-1] == name:
+    46	                output.append(i[0])
+    47	            # Check the file name
+    48	            elif name in i[1][1]:
+    49	                output.append(i[0] + '/' + name) # adds the path found
+    50	    # Regex flag
+    51	    elif regex is not None:
+    52	        for i in walk.items():
+    53	            # Check the directory name
+    54	            if re.search(regex, i[0].split('/')[-1]) is not None:
+    55	                output.append(i[0])
+    56	            # Check the file name
+    57	            for filename in i[1][1]:
+    58	                if re.search(regex, filename) is not None:
+    59	                    output.append(i[0] + '/' + filename) # adds the path found
+    60	                
+    61	    # If there is not command input, print
+    62	    if command is None:
+    63	        for line in output:
+    64	            print(line)
+    65	        return
+    66	    
+    67	    # String process "command flags {}"
+    68	    command_spl = command.split()
+    69	    should_exit = False
+    70	    
+    71	    for path in output:
+    72	        args = replacebrackets(command_spl, path)
+    73	        # print(command_spl)
+    74	        
+    75	        pid = os.fork() 
+    76	    
+    77	        if pid == 0: # Child
+    78	            try:
+    79	                os.execlp(args[0], *args)
+    80	            except OSError:
+    81	                # String formatting
+    82	                args_str = ''
+    83	                for a in args:
+    84	                    args_str += a
+    85	                    args_str += ' '
+    86	
+    87	                args_str = args_str[:-1]
+    88	                sys.exit("Error: Unable to start process '{}'".format(args_str))
+    89	        elif pid == -1: # Process cannot start
+    90	            sys.exit("Error: Unable to start process '{}'".format(''.join(args)))
+    91	        else: # Parent
+    92	            status = os.wait()
+    93	            exitcode = status[1] >> 8 # Get the high byte
+    94	            # If the child ends with non-zero exitcode, the parent exits as well
+    95	            if exitcode != 0:
+    96	                should_exit = True
+    97	
+    98	    # Exit with a non-zero exitcode
+    99	    if should_exit:
+   100	        sys.exit(1)
+   101	        
+   102	    
+   103	    
+   104	
+   105	if __name__ == "__main__":
+   106	    # No command line arguments given
+   107	    if len(sys.argv) == 0:
+   108	        sys.exit(USAGE)
+   109	
+   110	    # print(sys.argv)
+   111	    
+   112	    args = [None, None, None, None]
+   113	    first_no_flag = True
+   114	    
+   115	    flag_counter = 0 # Record how many flags
+   116	    command = ''
+   117	    for line in sys.argv[1:]: # Exclude the filename
+   118	        # RegEx flag
+   119	        if line.startswith('--regex='):
+   120	            args[1] = line[8:] # Get rid of the '--regex='
+   121	            args[1] = args[1].strip("\"") # Get rid of the quotes
+   122	            flag_counter += 1
+   123	        # Name flag
+   124	        elif line.startswith('--name='):
+   125	            args[2] = line[7:].strip("\"") # Get rid of the '--name='
+   126	            flag_counter += 1
+   127	        # Directory
+   128	        elif first_no_flag:
+   129	            # Add the directory from command line arguments
+   130	            args[0] = line.replace('~', '/home') # Replace ~ to /home
+   131	            first_no_flag = False
+   132	        # Command
+   133	        else:
+   134	            command += ' ' + line.strip("\"") # Strip the quotes
+   135	        
+   136	        if command == '':
+   137	            args[3] = None
+   138	        else:
+   139	            args[3] = command[1:]
+   140	        # print(args)
+   141	    
+   142	    # If more than one flags are received
+   143	    if flag_counter > 1:
+   144	        sys.exit(USAGE)
+   145	
+   146	    find(*args)
