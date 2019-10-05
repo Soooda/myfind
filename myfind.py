@@ -75,6 +75,8 @@ if __name__ == "__main__":
     # No command line arguments given
     if len(sys.argv) == 0:
         sys.exit(USAGE)
+
+    # print(sys.argv)
     
     args = [None, None, None, None]
     first_no_flag = True
@@ -93,14 +95,15 @@ if __name__ == "__main__":
         # Directory
         elif first_no_flag:
             # Add the directory from command line arguments
-            args[0] = sys.argv[1].replace('~', '/home') # Replace ~ to /home
+            args[0] = line.replace('~', '/home') # Replace ~ to /home
             first_no_flag = False
         # Command
         else:
             args[3] = line.strip("\"") # Strip the quotes
+        # print(args)
     
     # If more than one flags are received
     if flag_counter > 1:
         sys.exit(USAGE)
-        
+
     find(*args)
