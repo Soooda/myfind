@@ -77,9 +77,7 @@ if __name__ == "__main__":
         sys.exit(USAGE)
     
     args = [None, None, None, None]
-    
-    # Add the directory from command line arguments
-    args[0] = sys.argv[1].replace('~', '/home') # Replace ~ to /home
+    first_no_flag = True
     
     flag_counter = 0 # Record how many flags
     for line in sys.argv[1:]: # Exclude the filename
@@ -92,8 +90,13 @@ if __name__ == "__main__":
         elif line.startswith('--name='):
             args[2] = line[7:] # Get rid of the '--name='
             flag_counter += 1
-        # Command flag
-        elif '{}' in line:
+        # Directory
+        elif first_no_flag:
+            # Add the directory from command line arguments
+            args[0] = sys.argv[1].replace('~', '/home') # Replace ~ to /home
+            first_no_flag = False
+        # Command
+        else:
             args[3] = line.strip("\"") # Strip the quotes
     
     # If more than one flags are received
