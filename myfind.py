@@ -7,20 +7,15 @@ USAGE = "Usage: myfind [--regex=pattern | --name=filename] directory [command]"
 
 def replacebrackets(li, path):
     result = []
-    count = 0
 
     i = 0
     while i < len(li):
-        if li[i] == '{}':
-            result.append(path)
-            count += 1
+        if '{}' in li[i]:
+            result.append(li[i].replace('{}',path))
         else:
             result.append(li[i])
         i += 1
     
-    # If more than one pair of {} in li, return None
-    if count > 1:
-        return
     return result
 
 def find(directory, regex=None, name=None, command=None):
@@ -76,10 +71,6 @@ def find(directory, regex=None, name=None, command=None):
     for path in output:
         args = replacebrackets(command_spl, path)
         # print(command_spl)
-
-        # Invalid command (more than one pair of {})
-        if args is None:
-            sys.exit(USAGE)
         
         pid = os.fork() 
     
