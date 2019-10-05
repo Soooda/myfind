@@ -79,6 +79,7 @@ def find(directory, regex=None, name=None, command=None):
     
     # String process "command flags {}"
     command_spl = command.split()
+    should_exit = False
     
     for path in output:
         args = replacebrackets(command_spl, path)
@@ -105,8 +106,14 @@ def find(directory, regex=None, name=None, command=None):
         elif pid == -1: # Process cannot start
             sys.exit("Error: Unable to start process '{}'".format(''.join(args)))
         else: # Parent
-            os.wait()
+            status = os.wait()
+            exitcode = status[1] >> 8 # Get the high byte
+            # If the child ends with non-zero exitcode, the parent exits as well
+            if exitcode != 0:
+                should_exit = True
 
+    if should_exit:
+        sys.exit(1)
         
     
     
