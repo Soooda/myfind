@@ -1,0 +1,1 @@
+Usage: myfind [--regex=pattern | --name=filename] directory [command]
