@@ -5,14 +5,6 @@ import re
 
 USAGE = "Usage: myfind [--regex=pattern | --name=filename] directory [command]"
 
-def subprocess(command, path): 
-    pid = os.fork() 
-    
-    if pid > 0: 
-        os.wait()
-    else: 
-        os.execl('bash', command, path) 
-
 def replacebrackets(li, path):
     result = []
     count = 0
