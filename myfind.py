@@ -58,7 +58,7 @@ def find(directory, regex=None, name=None, command=None):
     command_spl = command.split()
     
     for path in output:
-        command_spl = [path if x == "{}" else x for x in command_spl]
+        command_spl[-1] = path
         # print(command_spl)
         pid = os.fork() 
     
@@ -76,8 +76,6 @@ if __name__ == "__main__":
     if len(sys.argv) == 0:
         sys.exit(USAGE)
     
-    # print(sys.argv)
-    
     args = [None, None, None, None]
     
     # Add the directory from command line arguments
@@ -92,7 +90,7 @@ if __name__ == "__main__":
             flag_counter += 1
         # Name flag
         elif line.startswith('--name='):
-            args[2] = line[7:].strip("\"") # Get rid of the '--name='
+            args[2] = line[7:] # Get rid of the '--name='
             flag_counter += 1
         # Command flag
         elif '{}' in line:
