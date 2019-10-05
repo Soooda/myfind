@@ -11,7 +11,25 @@ def subprocess(command, path):
     if pid > 0: 
         os.wait()
     else: 
-        os.execl('bash', command, path)
+        os.execl('bash', command, path) 
+
+def replacebrackets(li, path):
+    result = []
+    count = 0
+
+    i = 0
+    while i < len(li):
+        if li[i] == '{}':
+            result.append(path)
+            count += 1
+        else:
+            result.append(li[i])
+        i += 1
+    
+    # If more than one pair of {} in li, return None
+    if count > 1:
+        return
+    return result
 
 def find(directory, regex=None, name=None, command=None):
     # Saving the walking data
@@ -58,14 +76,19 @@ def find(directory, regex=None, name=None, command=None):
     command_spl = command.split()
     
     for path in output:
-        command_spl[-1] = path
+        args = replacebrackets(command_spl, path)
         # print(command_spl)
+
+        # Invalid command (more than one pair of {})
+        if args is None:
+            sys.exit(USAGE)
+        
         pid = os.fork() 
     
         if pid > 0: 
             os.wait()
         else: 
-            os.execlp(command_spl[0], *command_spl)
+            os.execlp(args[0], *args)
 
         
     
