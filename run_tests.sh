@@ -20,7 +20,7 @@ for t in test/*.in; do
         echo "Test $name: Failed"
     fi
 	count=$((count + 1))
-    echo 
+    echo -------------------------------------------------------
 done
 
 echo "Done!"
