@@ -1,16 +1,16 @@
 # MyFind
-A python program to mimic the behaviour of bash command find
+A python program to mimic the behaviour of bash command find.
 
-**The Find Command**
+### The Find Command
 All Unix-like systems (Linux, etc) have a command called "find". This command allows you to search the file system name-space for a file that satisfies some criteria.
 For example, you might search for a file with a particular name (exact match), or you might search for a file with a name that matches a regular expression pattern. You might search for a file that has certain characteristics such as created after a particular date or has certain permissions (eg writable).
 You can see the detailed specification of this command using the Unix man command, eg 
 
 ```bash
 man find
-```.
+```
 
-**Specification**
+### Specification
 To implement a very simplified version of the Unix find command.
 The syntax is:
 myfind.py [--regex=pattern | --name=filename] directory [command]
