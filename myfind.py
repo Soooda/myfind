@@ -121,7 +121,7 @@ if __name__ == "__main__":
             flag_counter += 1
         # Name flag
         elif line.startswith('--name='):
-            args[2] = line[7:] # Get rid of the '--name='
+            args[2] = line[7:].strip("\"") # Get rid of the '--name='
             flag_counter += 1
         # Directory
         elif first_no_flag:
