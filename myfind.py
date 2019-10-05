@@ -113,6 +113,7 @@ if __name__ == "__main__":
     first_no_flag = True
     
     flag_counter = 0 # Record how many flags
+    command = ''
     for line in sys.argv[1:]: # Exclude the filename
         # RegEx flag
         if line.startswith('--regex='):
@@ -130,7 +131,12 @@ if __name__ == "__main__":
             first_no_flag = False
         # Command
         else:
-            args[3] = line.strip("\"") # Strip the quotes
+            command += ' ' + line.strip("\"") # Strip the quotes
+        
+        if command == '':
+            args[3] = None
+        else:
+            args[3] = command[1:]
         # print(args)
     
     # If more than one flags are received
