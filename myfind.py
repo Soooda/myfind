@@ -38,6 +38,11 @@ def find(directory, regex=None, name=None, command=None):
         walk[tup[0]] = (tuple(tup[1]), tuple(tup[2]))
     # print(walk)
     
+    # The directory doesn't exist. 
+    # Treat it as an invalid command line argument, and print out the usage string
+    if walk == {}:
+        sys.exit(USAGE)
+        
     output = [] # Output lines collection
     
     # directory
