@@ -104,6 +104,7 @@ def find(directory, regex=None, name=None, command=None):
             if exitcode != 0:
                 should_exit = True
 
+    # Exit with a non-zero exitcode
     if should_exit:
         sys.exit(1)
         
