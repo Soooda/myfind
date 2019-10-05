@@ -90,10 +90,22 @@ def find(directory, regex=None, name=None, command=None):
         
         pid = os.fork() 
     
-        if pid > 0: 
+        if pid == 0: # Child
+            try:
+                os.execlp(args[0], *args)
+            except OSError:
+                # String formatting
+                args_str = ''
+                for a in args:
+                    args_str += a
+                    args_str += ' '
+
+                args_str = args_str[:-1]
+                sys.exit("Error: Unable to start process '{}'".format(args_str))
+        elif pid == -1: # Process cannot start
+            sys.exit("Error: Unable to start process '{}'".format(''.join(args)))
+        else: # Parent
             os.wait()
-        else: 
-            os.execlp(args[0], *args)
 
         
     
