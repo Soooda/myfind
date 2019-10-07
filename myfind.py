@@ -76,7 +76,11 @@ def find(directory, regex=None, name=None, command=None):
     
         if pid == 0: # Child
             try:
-                os.execlp(args[0], *args)
+                # Deal with command "{}"
+                if len(args) == 1:
+                    os.execlp('bash', 'bash', args[0])
+                else:
+                    os.execlp(args[0], *args)
             except OSError:
                 # String formatting
                 args_str = ''
