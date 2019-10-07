@@ -1,0 +1,19 @@
+      0       0       0 test
+  19  133 1133 test/STDERR
+  19  133 1133 test/processCannotStart.out
+ 1  1 15 test/findName.out
+ 1  2 11 test/hello.sh
+ 1  7 70 test/pathNoExist.out
+ 149  676 5588 test/commandWithFlag.out
+ 19  76 612 test/commandMultiProcess.out
+ 2  2 21 test/findRegex.sortin
+ 2  2 24 test/findName.sortin
+ 2  2 46 test/findRegex.out
+ 2  3 13 test/commandMultiProcess.sortin
+ 2  3 15 test/processCannotStart.errorin
+ 232  232 8010 test/listHome.out
+ 3  3 28 test/commandOnly{}.in
+ 3  5 33 test/commandWithFlag.in
+1 1 2 test/listHome.sortin
+1 1 6 test/commandOnly{}.out
+1 1 6 test/pathNoExist.errorin
