@@ -52,5 +52,17 @@ provided in the last usage example.
 
 > Error: Unable to start process '\<command\>'
 
+### Testcases
+
+For all the testcases:
+
+1. Each argument passed to myfind is in a seperated line.
+
+2. Testcases that will produce **non-deterministic** output will have extension ```.sortin```
+
+3. Testcases that will produce **deterministic** output namely running certain commands will have extension ```.in```
+
+4. Testcases that will produce **nonzero exit code and send messages to Stderr** will have extension ```.errorin```
+
 ### Usage Examples
 Updating...
