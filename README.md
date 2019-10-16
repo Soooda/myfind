@@ -1,7 +1,7 @@
 # MyFind
 A python program to mimic the behaviour of bash command find.
 
-### The Find Command
+## The Find Command
 All Unix-like systems (Linux, etc) have a command called "find". This command allows you to search the file system name-space for a file that satisfies some criteria.
 For example, you might search for a file with a particular name (exact match), or you might search for a file with a name that matches a regular expression pattern. You might search for a file that has certain characteristics such as created after a particular date or has certain permissions (eg writable).
 
@@ -11,7 +11,7 @@ You can see the detailed specification of this command using the Unix man comman
 man find
 ```
 
-### Specification
+## Specification
 To implement a very simplified version of the Unix find command.
 
 The syntax is:
@@ -37,7 +37,7 @@ argument is not provided, then just list the file paths of the discovered files.
 string should be a simple command with an argument list (e.g. no redirections or
 pipes).
 
-### Error Handling and Assumptions
+## Error Handling and Assumptions
 If invalid command line arguments are provided, your program should output the
 following to standard error and exit with a non-zero exit code. You should also print
 this for pattern is invalid or directory does not exist.
@@ -52,7 +52,7 @@ provided in the last usage example.
 
 > Error: Unable to start process '\<command\>'
 
-### Testcases
+## Testcases
 
 For all the testcases:
 
@@ -64,7 +64,7 @@ For all the testcases:
 
 4. Testcases that will produce **nonzero exit code and send messages to Stderr** will have extension ```.errorin```
 
-### Usage Examples
+## Usage Examples
 
 Given a directory without flags:
 ```Bash
